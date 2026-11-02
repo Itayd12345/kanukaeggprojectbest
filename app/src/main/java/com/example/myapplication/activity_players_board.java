@@ -34,12 +34,9 @@ public class activity_players_board extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_players_board);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.pb_main), (v,
-                                                                               insets) -> {
-            Insets systemBars =
-                    insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right,
-                    systemBars.bottom);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.pb_main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
         Intent intent = getIntent();
@@ -66,11 +63,14 @@ public class activity_players_board extends AppCompatActivity implements
             EditText input = new EditText(this);
 
             new AlertDialog.Builder(this)
-                    .setView(input)
-                    .setPositiveButton("Delete", (d, w) ->
-                            dbHelper.removePlayer(input.getText().toString()))
-                    .setNegativeButton("Cancel", null)
-                    .show();
+                    .setView(input).setPositiveButton("Delete", (d, w) -> {
+                        dbHelper.removePlayer(input.getText().toString());
+                        players.clear();
+                        players.addAll(dbHelper.getPlayersInfo());
+                        Collections.sort(players);
+                        ea.notifyDataSetChanged();
+                    })
+                    .setNegativeButton("Cancel", null).show();
         }
     }
 }
