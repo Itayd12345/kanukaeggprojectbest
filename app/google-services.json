@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "237985155906",
+    "project_id": "kanukaeggprojectbest",
+    "storage_bucket": "kanukaeggprojectbest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237985155906:android:8596c7a27b69fccd0256db",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAH5Syx-ZN7L4_lCNECD2ZbwgUeWAvLAH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

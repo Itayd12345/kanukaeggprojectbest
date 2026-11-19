@@ -8,11 +8,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.view.View;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     TextView tv_title;
     TextView tv_helpme;
@@ -65,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 imgbtn_egg.setImageResource(R.drawable.hatchchicken);
                 tv_count.setVisibility(View.INVISIBLE);
                 tv_helpme.setVisibility(View.INVISIBLE);
-                dbHelper.updateGames(em.getName(), em.getPassword());
+                updateGamesInFB(em.getName(), em.getPassword());
             }
         }
         if (v == btn_reset) {
@@ -90,4 +97,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
     }
-}
+    public void updateGamesInFB(String name, String password) {
+        DatabaseReference playerRef = FirebaseDatabase.getInstance().getReference("Players").child(name);
+        playerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    Player p = new Player(name, password, 1);
+                    playerRef.setValue(p);
+                } else {
+                    Player p = snapshot.getValue(Player.class);
+                    if (p != null) {
+                        int games = p.getNumOfGames() + 1;
+                        playerRef.child("numOfGames").setValue(games);
+                    }
+                }
+            }
+        @Override
+        public void onCancelled (@NonNull com.google.firebase.database.DatabaseError error){
+        }
+    });
+}}
